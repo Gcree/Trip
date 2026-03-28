@@ -32,7 +32,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── 導航列 (Hamburger Nav) UX & HIG 優化 ── */
+  /* ── 頂部導航列 & 進度條 (Feature 4) ── */
   .sticky-nav {
     position: sticky;
     top: 0;
@@ -43,12 +43,28 @@
     border-bottom: 1px solid var(--glass-border);
   }
 
+  .progress-container {
+    width: 100%;
+    height: 3px;
+    background: transparent;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--sky);
+    width: 0%;
+    transition: width 0.1s ease-out;
+  }
+
   .nav-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 16px;
-    height: 60px; /* 確保頂部有固定高度 */
+    height: 60px;
   }
 
   .nav-title {
@@ -62,107 +78,49 @@
     gap: 8px;
   }
 
-  /* 漢堡按鈕核心設計: 觸控區 44x44 以上 */
   .hamburger {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    width: 44px;
-    height: 44px;
-    padding: 8px;
-    z-index: 101;
+    background: none; border: none; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 44px; height: 44px; padding: 8px; z-index: 101;
   }
-
-  .hamburger span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--white);
-    border-radius: 2px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* 漢堡變 X 的動畫 */
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
   .hamburger.active span:nth-child(2) { opacity: 0; }
   .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-  /* 摺疊選單容器 */
-  .nav-menu {
-    display: flex;
-    gap: 8px;
-    transition: all 0.3s ease-out;
-  }
-
+  .nav-menu { display: flex; gap: 8px; transition: all 0.3s ease-out; }
+  
   .nav-pill {
     color: var(--white);
     text-decoration: none;
     font-size: 15px;
     font-weight: 500;
-    min-height: 44px; /* HIG 核心規範 */
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
     border-radius: 12px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
   }
-
-  .nav-day {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    color: var(--sky);
-    letter-spacing: 0.05em;
-  }
-
+  .nav-day { font-family: 'Space Mono', monospace; font-weight: 700; color: var(--sky); letter-spacing: 0.05em; }
   .nav-pill:active { background: rgba(255,255,255,0.15); transform: scale(0.98); }
 
-  /* 行動版選單樣式 */
-  @media (max-width: 768px) {
-    .nav-menu {
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: rgba(5, 31, 46, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 20px;
-      border-bottom: 1px solid transparent;
-      opacity: 0;
-    }
-    .nav-menu.active {
-      max-height: 80vh; /* 展開高度 */
-      padding: 16px 20px 24px;
-      border-bottom: 1px solid var(--glass-border);
-      opacity: 1;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    
-    /* HIG: 手機版按鈕滿版大區域 */
-    .nav-pill {
-      width: 100%;
-      justify-content: center;
-      padding: 14px;
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-    .nav-divider {
-      height: 1px;
-      background: rgba(255,255,255,0.1);
-      margin: 8px 0 14px;
-    }
+  /* Feature 3: Scroll Spy 高亮樣式 */
+  .nav-pill.active-nav {
+    background: rgba(26, 127, 168, 0.25);
+    border-color: var(--sky);
+    color: var(--white);
+    box-shadow: 0 0 10px rgba(26, 127, 168, 0.4);
   }
 
-  /* 桌面版保留橫向排列，隱藏漢堡按鈕 */
+  @media (max-width: 768px) {
+    .nav-menu {
+      flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(5, 31, 46, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); max-height: 0; overflow: hidden; padding: 0 20px; border-bottom: 1px solid transparent; opacity: 0;
+    }
+    .nav-menu.active { max-height: 85vh; padding: 16px 20px 24px; border-bottom: 1px solid var(--glass-border); opacity: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow-y: auto; }
+    .nav-pill { width: 100%; justify-content: center; padding: 14px; font-size: 16px; margin-bottom: 6px; }
+    .nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0 14px; }
+  }
+
   @media (min-width: 769px) {
     .hamburger { display: none; }
     .nav-header { display: none; }
@@ -170,6 +128,47 @@
     .nav-pill { padding: 0 20px; border-radius: 22px; }
     .nav-divider { display: none; }
   }
+
+  /* ── 滾動動畫 (Feature 1: Scroll Reveal) ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 懸浮置頂按鈕 (Feature 2: FAB) ── */
+  #backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: var(--white);
+    border: none;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 99;
+    cursor: pointer;
+  }
+  #backToTop.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  #backToTop:active { transform: scale(0.9); }
 
   /* ── 錨點偏移設定 ── */
   .section-header, .day-block { scroll-margin-top: 80px; }
@@ -217,9 +216,35 @@
   .hotel-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
   .hotel-loc { font-size: 13px; color: var(--sand); display: inline-flex; align-items: center; gap: 4px; background: rgba(232,184,75,0.15); padding: 4px 10px; border-radius: 12px; font-weight: 500;}
 
+  /* ── 外部地圖連結 UI 設計 ── */
+  .location-link {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+  .location-link::after {
+    content: '↗';
+    font-family: sans-serif;
+    font-size: 0.75em;
+    margin-left: 4px;
+    opacity: 0.4;
+    transition: all 0.2s ease;
+    display: inline-block;
+  }
+  .location-link:hover {
+    color: var(--sky);
+  }
+  .location-link:hover::after {
+    opacity: 1;
+    color: var(--coral);
+    transform: translate(2px, -2px);
+  }
+
   /* ── TIMELINE ── */
   .timeline-wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; position: relative; }
-  .timeline-wrap::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: linear-gradient(to bottom, transparent, rgba(26,127,168,0.5) 5%, rgba(26,127,168,0.5) 95%, transparent); transform: translateX(-50%); }
+  .timeline-wrap::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: linear-gradient(to bottom, rgba(26,127,168,0), rgba(26,127,168,0.5) 5%, rgba(26,127,168,0.5) 95%, rgba(26,127,168,0)); z-index: 1; }
 
   .day-block { margin-bottom: 80px; position: relative; }
   .day-heading { display: flex; justify-content: center; align-items: center; margin-bottom: 40px; position: relative; z-index: 2; }
@@ -230,16 +255,13 @@
   .day-theme { font-family: 'Noto Serif TC', serif; font-size: 16px; color: var(--sand); font-weight: 700; margin-top: 2px; }
   .region-tag { display: inline-block; margin-left: 10px; padding: 3px 10px; background: rgba(232,184,75,0.15); border: 1px solid rgba(232,184,75,0.4); border-radius: 6px; font-size: 12px; color: var(--gold); font-family: 'Space Mono', monospace; vertical-align: middle; }
 
-  /* Timeline Grid Structure */
   .entry { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: start; margin-bottom: 24px; gap: 0; }
   .entry-left { grid-column: 1; text-align: right; padding-right: 32px; }
   .entry-right { grid-column: 3; text-align: left; padding-left: 32px; }
   .entry-center { grid-column: 2; display: flex; justify-content: center; align-items: flex-start; padding-top: 10px; }
-
   .entry.flip .entry-left { grid-column: 3; text-align: left; padding-left: 32px; padding-right: 0; }
   .entry.flip .entry-right { grid-column: 1; text-align: right; padding-right: 32px; padding-left: 0; }
   .entry.flip .entry-center { grid-column: 2; }
-
   .entry-left:empty, .entry-right:empty { display: none; }
 
   .node { width: 14px; height: 14px; border-radius: 50%; background: var(--sky); border: 2px solid var(--deep); position: relative; z-index: 2; transition: all 0.3s ease; }
@@ -247,7 +269,6 @@
 
   .entry-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; transition: transform 0.2s ease, background 0.2s ease; }
   .entry-card:active { background: rgba(255,255,255,0.08); transform: scale(0.98); }
-
   .entry-time { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--coral); letter-spacing: 0.1em; margin-bottom: 8px; font-weight: 700; }
   .entry-name { font-family: 'Noto Serif TC', serif; font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
   .entry-desc { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.6; }
@@ -266,41 +287,59 @@
   .tickets-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 0 20px; }
   .ticket-card { border-radius: 16px; padding: 24px; position: relative; overflow: hidden; background: var(--glass-bg); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
   .ticket-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-
   .ticket-urgent { border: 1px solid rgba(244,132,95,0.25); } .ticket-urgent::before { background: var(--coral); }
   .ticket-recommend { border: 1px solid rgba(232,184,75,0.2); } .ticket-recommend::before { background: var(--gold); }
-
   .ticket-level { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.15em; margin-bottom: 12px; text-transform: uppercase; font-weight: 700; }
   .ticket-urgent .ticket-level { color: var(--coral); } .ticket-recommend .ticket-level { color: var(--gold); }
-
   .ticket-name { font-family: 'Noto Serif TC', serif; font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 12px; line-height: 1.4; }
   .ticket-note, .ticket-note ul li { font-size: 15px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 8px;}
 
   /* ── Mobile Responsive UX ── */
   @media (max-width: 768px) {
-    .timeline-wrap::before { left: 28px; }
+    .timeline-wrap::before { left: 48px; }
     .day-pill { padding: 10px 24px; }
     .day-theme { font-size: 15px; }
-    
     .entry { grid-template-columns: 56px 1fr; gap: 12px; margin-bottom: 24px; }
     .entry-center, .entry.flip .entry-center { grid-column: 1 !important; padding-top: 24px; }
-    
-    .entry-left, .entry-right, 
-    .entry.flip .entry-left, .entry.flip .entry-right { 
-      grid-column: 2 !important; 
-      text-align: left !important; 
-      padding: 0 !important; 
-      display: block !important;
-    }
-    
+    .entry-left, .entry-right, .entry.flip .entry-left, .entry.flip .entry-right { grid-column: 2 !important; text-align: left !important; padding: 0 !important; display: block !important; }
     .entry-left:empty, .entry-right:empty { display: none !important; }
     .entry.flip .entry-tags { justify-content: flex-start !important; }
-    
     .entry-card { padding: 20px 16px; }
     .entry-name { font-size: 17px; } 
     .entry-desc { font-size: 15px; }
-    
     .grid-container { grid-template-columns: 1fr; }
+  }
+
+  /* ── 完美列印模式 (Feature 5: Print-Friendly) ── */
+  @media print {
+    body { background: #ffffff !important; color: #000000 !important; }
+    .sticky-nav, #backToTop, .hero-wave, .deco-circle, .hero::before { display: none !important; }
+    .hero { min-height: auto; padding: 20px 0; background: none !important; color: #000 !important;}
+    .hero-title, .hero-sub, .hero-date, .hero-title span, .hero-eyebrow { color: #000 !important; }
+    .badge { border: 1px solid #000 !important; color: #000 !important; background: transparent !important; }
+    
+    .section-title, .section-label { color: #000 !important; }
+    .info-card, .entry-card, .ticket-card, .day-pill { 
+      background: transparent !important; 
+      border: 1px solid #ccc !important; 
+      box-shadow: none !important; 
+      page-break-inside: avoid;
+      color: #000 !important;
+    }
+    .entry-name, .entry-desc, .ticket-name, .ticket-note, .info-card-title, .hotel-name { color: #000 !important; }
+    .entry-time, .day-num, .day-date, .day-theme { color: #333 !important; }
+    .checklist li, .ticket-note ul li { color: #000 !important; }
+    
+    .timeline-wrap::before { background: #ccc !important; }
+    .node { background: #fff !important; border-color: #000 !important; box-shadow: none !important; }
+    .tag { border: 1px solid #999 !important; color: #333 !important; background: transparent !important; }
+    .hotel-item { border-left-width: 2px; }
+    
+    /* 列印時隱藏外連 icon 與去除連結效果 */
+    .location-link::after { display: none !important; }
+    .location-link { text-decoration: none !important; color: inherit !important; }
+    
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   }
 </style>
 </head>
@@ -350,14 +389,18 @@
     <div class="nav-divider"></div>
     <a href="#tickets" class="nav-pill">🎟️ 預約攻略與規則</a>
   </div>
+  
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
 </nav>
 
-<div id="prep" class="section-header">
+<div id="prep" class="section-header reveal">
   <p class="section-label">Pre-trip Checklist</p>
   <h2 class="section-title">行前必備須知</h2>
 </div>
 <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
-  <div class="info-card">
+  <div class="info-card reveal">
     <div class="info-card-header">
       <div class="info-card-icon">🪪</div>
       <h3 class="info-card-title">必備文件與數位準備</h3>
@@ -371,7 +414,7 @@
     </ul>
   </div>
 
-  <div class="info-card">
+  <div class="info-card reveal" style="transition-delay: 0.2s;">
     <div class="info-card-header">
       <div class="info-card-icon">🧴</div>
       <h3 class="info-card-title">洗漱與個人用品</h3>
@@ -385,45 +428,45 @@
   </div>
 </div>
 
-<div id="hotels" class="section-header">
+<div id="hotels" class="section-header reveal">
   <p class="section-label">Accommodations</p>
   <h2 class="section-title">住宿總覽</h2>
 </div>
 <div class="grid-container">
-  <div class="info-card">
+  <div class="info-card reveal">
     <div class="hotel-grid">
       <div class="hotel-item" style="border-color: var(--coral);">
         <span class="hotel-day">DAY 1 ｜ 4/7 (二)</span>
-        <div class="hotel-name">那霸倫勃朗風格飯店<br>(Rembrandt Style Naha)</div>
+        <div class="hotel-name"><a href="https://www.google.com/maps/search/?api=1&query=Rembrandt+Style+Naha" target="_blank" rel="noopener noreferrer" class="location-link">那霸倫勃朗風格飯店<br>(Rembrandt Style Naha)</a></div>
         <span class="hotel-loc">📍 南部市區</span>
       </div>
       <div class="hotel-item" style="border-color: var(--moss);">
         <span class="hotel-day">DAY 2 ｜ 4/8 (三)</span>
-        <div class="hotel-name">沖繩玉庫裡那度假村<br>(Okinawa Kariyushi Resort)</div>
+        <div class="hotel-name"><a href="https://www.google.com/maps/search/?api=1&query=Okinawa+Kariyushi+Beach+Resort+Ocean+Spa" target="_blank" rel="noopener noreferrer" class="location-link">沖繩玉庫裡那度假村<br>(Okinawa Kariyushi Resort)</a></div>
         <span class="hotel-loc">📍 北部恩納村</span>
       </div>
       <div class="hotel-item" style="border-color: var(--sky);">
         <span class="hotel-day">DAY 3 ｜ 4/9 (四)</span>
-        <div class="hotel-name">瑞康水晶飯店<br>(Rycom Crystal Hotel)</div>
+        <div class="hotel-name"><a href="https://www.google.com/maps/search/?api=1&query=Rycom+Crystal+Hotel+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">瑞康水晶飯店<br>(Rycom Crystal Hotel)</a></div>
         <span class="hotel-loc">📍 中部沖繩市</span>
       </div>
       <div class="hotel-item" style="border-color: var(--gold);">
         <span class="hotel-day">DAY 4 ｜ 4/10 (五)</span>
-        <div class="hotel-name">Creass飯店 - 壺川Marche<br>(Creass Hotel Tsubogawa)</div>
+        <div class="hotel-name"><a href="https://www.google.com/maps/search/?api=1&query=Creass+Hotel+Tsubogawa+Marche" target="_blank" rel="noopener noreferrer" class="location-link">Creass飯店 - 壺川Marche<br>(Creass Hotel Tsubogawa)</a></div>
         <span class="hotel-loc">📍 南部市區</span>
       </div>
     </div>
   </div>
 </div>
 
-<div class="section-header">
+<div class="section-header reveal">
   <p class="section-label">Daily Schedule</p>
   <h2 class="section-title">每日行程時間軸</h2>
 </div>
 
 <div class="timeline-wrap">
   <div id="day1" class="day-block">
-    <div class="day-heading">
+    <div class="day-heading reveal">
       <div class="day-pill">
         <span class="day-num">01</span>
         <div class="day-meta">
@@ -433,24 +476,24 @@
       </div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node highlight"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">15:50 – 17:50</div>
-          <div class="entry-name">✈ 抵達那霸機場</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Naha+Airport" target="_blank" rel="noopener noreferrer" class="location-link">✈ 抵達那霸機場</a></div>
           <div class="entry-desc">通關與領行李，預留 1.5~2 小時辦理 VJW 入關與提領行李</div>
           <div class="entry-tags"><span class="tag tag-transport">通關手續</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">18:00 – 19:00</div>
-          <div class="entry-name">🚗 辦理租車・車輛點交</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Toyota+Rent+a+Car+Naha+Airport" target="_blank" rel="noopener noreferrer" class="location-link">🚗 辦理租車・車輛點交</a></div>
           <div class="entry-desc">搭乘接駁車至營業所，完成 Toyota Prius 取車點交</div>
           <div class="entry-tags"><span class="tag tag-transport">接駁 + 取車</span></div>
         </div>
@@ -459,25 +502,25 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">19:30</div>
-          <div class="entry-name">🏨 Check-in 卸放行李</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Rembrandt+Style+Naha" target="_blank" rel="noopener noreferrer" class="location-link">🏨 Check-in 卸放行李</a></div>
           <div class="entry-desc">入住 那霸倫勃朗風格飯店</div>
           <div class="entry-tags"><span class="tag tag-stay">飯店安頓</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">20:00</div>
-          <div class="entry-name">🍺 那霸國際通 & 久茂地周邊</div>
-          <div class="entry-desc">巷弄居酒屋探索 → 前往 GiGO 那霸打 maimai 暖身 → 藥妝比價</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Kokusai+Dori+Naha" target="_blank" rel="noopener noreferrer" class="location-link">🍺 那霸國際通 & 久茂地周邊</a></div>
+          <div class="entry-desc">巷弄居酒屋探索 → 前往 <a href="https://www.google.com/maps/search/?api=1&query=GiGO+Naha" target="_blank" rel="noopener noreferrer" class="location-link">GiGO 那霸</a> 打 maimai 暖身 → 藥妝比價</div>
           <div class="entry-tags"><span class="tag tag-food">晚餐探索</span><span class="tag tag-shop">藥妝比價</span></div>
         </div>
       </div>
@@ -487,7 +530,7 @@
   </div>
 
   <div id="day2" class="day-block">
-    <div class="day-heading">
+    <div class="day-heading reveal">
       <div class="day-pill">
         <span class="day-num">02</span>
         <div class="day-meta">
@@ -497,7 +540,7 @@
       </div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
@@ -510,11 +553,11 @@
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">10:30 – 11:30</div>
-          <div class="entry-name">🌉 古宇利大橋</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Kouri+Bridge" target="_blank" rel="noopener noreferrer" class="location-link">🌉 古宇利大橋</a></div>
           <div class="entry-desc">拍攝海天一色大景，絕佳影像素材蒐集點</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 1 小時</span></div>
         </div>
@@ -523,24 +566,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">12:00 – 13:30</div>
-          <div class="entry-name">🌿 備瀬福木林道</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Bise+Fukugi+Tree+Road" target="_blank" rel="noopener noreferrer" class="location-link">🌿 備瀬福木林道</a></div>
           <div class="entry-desc">百年老榕樹林道，享受樹冠錯落光影</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 1.5 小時</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">14:00 – 16:30</div>
-          <div class="entry-name">🐋 沖繩美麗海水族館</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Okinawa+Churaumi+Aquarium" target="_blank" rel="noopener noreferrer" class="location-link">🐋 沖繩美麗海水族館</a></div>
           <div class="entry-desc">避開早晨團客人潮，享受更流暢的觀賞動線</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 2.5 小時</span><span class="tag tag-tip">電子門票</span></div>
         </div>
@@ -549,24 +592,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">17:00</div>
-          <div class="entry-name">🏨 Check-in</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Okinawa+Kariyushi+Beach+Resort+Ocean+Spa" target="_blank" rel="noopener noreferrer" class="location-link">🏨 Check-in</a></div>
           <div class="entry-desc">入住 沖繩玉庫裡那度假村</div>
           <div class="entry-tags"><span class="tag tag-stay">度假村</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">18:00 – 20:00</div>
-          <div class="entry-name">🥩 琉球的牛 恩納本館</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Ryukyu+no+Ushi+Onna" target="_blank" rel="noopener noreferrer" class="location-link">🥩 琉球的牛 恩納本館</a></div>
           <div class="entry-desc">享用頂級和牛燒肉，務必提前預約</div>
           <div class="entry-tags"><span class="tag tag-food">停留 2 小時</span><span class="tag tag-tip">強制預約</span></div>
         </div>
@@ -577,7 +620,7 @@
   </div>
 
   <div id="day3" class="day-block">
-    <div class="day-heading">
+    <div class="day-heading reveal">
       <div class="day-pill">
         <span class="day-num">03</span>
         <div class="day-meta">
@@ -587,24 +630,24 @@
       </div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">09:30 – 10:15</div>
-          <div class="entry-name">🌊 萬座毛</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Cape+Manzamo" target="_blank" rel="noopener noreferrer" class="location-link">🌊 萬座毛</a></div>
           <div class="entry-desc">壯闊海岸奇景與象鼻岩</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 45 分鐘</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">10:30 – 13:00</div>
-          <div class="entry-name">🤿 青之洞窟 潛水/浮潛</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Blue+Cave+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">🤿 青之洞窟 潛水/浮潛</a></div>
           <div class="entry-desc">探索絕美藍洞（建議購買含中文指導與水下攝影方案）</div>
           <div class="entry-tags"><span class="tag tag-sight">約 2.5 小時</span><span class="tag tag-tip">線上預約</span></div>
         </div>
@@ -613,24 +656,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">13:30 – 14:30</div>
-          <div class="entry-name">🎋 琉球村</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Ryukyu+Mura" target="_blank" rel="noopener noreferrer" class="location-link">🎋 琉球村</a></div>
           <div class="entry-desc">沖繩傳統文化體驗</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 1 小時</span><span class="tag tag-tip">電子門票</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">14:45 – 16:15</div>
-          <div class="entry-name">☕ 星野集團 Banta Cafe</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Banta+Cafe+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">☕ 星野集團 Banta Cafe</a></div>
           <div class="entry-desc">清水模建築與海景交融，極佳的攝影取景地</div>
           <div class="entry-tags"><span class="tag tag-food">停留 1.5 小時</span><span class="tag tag-sight">空間設計巡禮</span></div>
         </div>
@@ -639,24 +682,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node highlight"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">16:30 – 19:00</div>
-          <div class="entry-name">🇺🇸 美國村 & 9-8 Mihama</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=American+Village+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">🇺🇸 美國村 & 9-8 Mihama</a></div>
           <div class="entry-desc">於 Blue Seal 冰淇淋捕捉高飽和度美式復古畫面</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 2.5 小時</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">19:00</div>
-          <div class="entry-name">🍔 美國村周邊晚餐 / Check-in</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Rycom+Crystal+Hotel+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">🍔 美國村周邊晚餐 / Check-in</a></div>
           <div class="entry-desc">晚餐後於 20:30 入住 瑞康水晶飯店</div>
           <div class="entry-tags"><span class="tag tag-food">彈性晚餐</span><span class="tag tag-stay">飯店安頓</span></div>
         </div>
@@ -667,7 +710,7 @@
   </div>
 
   <div id="day4" class="day-block">
-    <div class="day-heading">
+    <div class="day-heading reveal">
       <div class="day-pill">
         <span class="day-num">04</span>
         <div class="day-meta">
@@ -677,24 +720,24 @@
       </div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node highlight"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">09:30 – 12:00</div>
-          <div class="entry-name">🛍️ AEON MALL Okinawa Rycom</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=AEON+MALL+Okinawa+Rycom" target="_blank" rel="noopener noreferrer" class="location-link">🛍️ AEON MALL Okinawa Rycom</a></div>
           <div class="entry-desc">直衝沖繩寶可夢中心，戰利品先放回 Prius 車上</div>
           <div class="entry-tags"><span class="tag tag-shop">停留 2.5 小時</span><span class="tag tag-tip">護照退稅</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">12:30 – 13:30</div>
-          <div class="entry-name">🍔 A&W 漢堡 牧港本店</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=A%26W+Makiminato" target="_blank" rel="noopener noreferrer" class="location-link">🍔 A&W 漢堡 牧港本店</a></div>
           <div class="entry-desc">復古汽車餐廳，必點麥根沙士 (Root Beer)</div>
           <div class="entry-tags"><span class="tag tag-food">停留 1 小時</span></div>
         </div>
@@ -703,24 +746,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">14:00 – 15:30</div>
-          <div class="entry-name">🏡 港川外人住宅 & Houki Boshi 可麗露</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Minatogawa+Stateside+Town" target="_blank" rel="noopener noreferrer" class="location-link">🏡 港川外人住宅</a> & <a href="https://www.google.com/maps/search/?api=1&query=Houki+Boshi+Minatogawa" target="_blank" rel="noopener noreferrer" class="location-link">Houki Boshi 可麗露</a></div>
           <div class="entry-desc">美軍舊宿舍文創聚落，品牌包裝設計絕佳參考場域</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 1.5 小時</span><span class="tag tag-food">甜點</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">16:00 – 18:30</div>
-          <div class="entry-name">🛒 San-A PARCO CITY + namco</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=San-A+Urasoe+West+Coast+PARCO+CITY" target="_blank" rel="noopener noreferrer" class="location-link">🛒 San-A PARCO CITY + namco</a></div>
           <div class="entry-desc">最大型商場服飾採買；於館內 namco 進行 maimai 重頭戲</div>
           <div class="entry-tags"><span class="tag tag-shop">停留 2.5 小時</span><span class="tag tag-tip">備妥 Aime 卡</span></div>
         </div>
@@ -729,24 +772,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">19:00 – 21:00</div>
-          <div class="entry-name">🦅 MEGA唐吉訶德 👉 漫畫倉庫 那霸店</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=MEGA+Don+Quijote+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">🦅 MEGA唐吉訶德</a> 👉 <a href="https://www.google.com/maps/search/?api=1&query=Manga+Souko+Naha" target="_blank" rel="noopener noreferrer" class="location-link">漫畫倉庫 那霸店</a></div>
           <div class="entry-desc">夜間尋寶掃貨，將大型免稅藥妝與二手公仔放於 Prius 後座第 4 空位</div>
           <div class="entry-tags"><span class="tag tag-shop">戰利品搜刮</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">21:30</div>
-          <div class="entry-name">🏨 Check-in</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Creass+Hotel+Tsubogawa+Marche" target="_blank" rel="noopener noreferrer" class="location-link">🏨 Check-in</a></div>
           <div class="entry-desc">入住 Creass飯店 - 壺川Marche</div>
           <div class="entry-tags"><span class="tag tag-stay">飯店安頓</span></div>
         </div>
@@ -757,7 +800,7 @@
   </div>
 
   <div id="day5" class="day-block">
-    <div class="day-heading">
+    <div class="day-heading reveal">
       <div class="day-pill">
         <span class="day-num">05</span>
         <div class="day-meta">
@@ -767,24 +810,24 @@
       </div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">08:30 – 09:00</div>
-          <div class="entry-name">⛩ 波上宮</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Naminoue+Shrine" target="_blank" rel="noopener noreferrer" class="location-link">⛩ 波上宮</a></div>
           <div class="entry-desc">晨間光線最佳參拜點，琉球八社之首</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 30 分鐘</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">09:40 – 11:10</div>
-          <div class="entry-name">🕳 玉泉洞</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Gyokusendo+Cave" target="_blank" rel="noopener noreferrer" class="location-link">🕳 玉泉洞</a></div>
           <div class="entry-desc">地下鐘乳石奇觀，壯麗的地質美學</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 1.5 小時</span><span class="tag tag-tip">電子門票</span></div>
         </div>
@@ -793,24 +836,24 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
         <div class="entry-card">
           <div class="entry-time">11:30 – 12:00</div>
-          <div class="entry-name">🐱 貓之島 (奧武島)</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Oujima+Island+Okinawa" target="_blank" rel="noopener noreferrer" class="location-link">🐱 貓之島 (奧武島)</a></div>
           <div class="entry-desc">吃天婦羅、看海擼貓</div>
           <div class="entry-tags"><span class="tag tag-sight">停留 30 分鐘</span></div>
         </div>
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">12:20 – 13:20</div>
-          <div class="entry-name">🌊 瀨長島 Umikaji Terrace</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Senagajima+Umikaji+Terrace" target="_blank" rel="noopener noreferrer" class="location-link">🌊 瀨長島 Umikaji Terrace</a></div>
           <div class="entry-desc">Poke Boo 👉 幸福鬆餅。純白階梯建築最後巡禮。設定鬧鐘，13:20 務必全員上車。</div>
           <div class="entry-tags"><span class="tag tag-food">午餐甜點</span><span class="tag tag-sight">預約制</span></div>
         </div>
@@ -819,7 +862,7 @@
       <div class="entry-right"></div>
     </div>
 
-    <div class="entry">
+    <div class="entry reveal">
       <div class="entry-left"></div>
       <div class="entry-center"><div class="node"></div></div>
       <div class="entry-right">
@@ -832,11 +875,11 @@
       </div>
     </div>
 
-    <div class="entry flip">
+    <div class="entry flip reveal">
       <div class="entry-left">
         <div class="entry-card">
           <div class="entry-time">14:00 – 16:50</div>
-          <div class="entry-name">✈ 那霸機場出發預備</div>
+          <div class="entry-name"><a href="https://www.google.com/maps/search/?api=1&query=Naha+Airport" target="_blank" rel="noopener noreferrer" class="location-link">✈ 那霸機場出發預備</a></div>
           <div class="entry-desc">抵達機場，預留 2.5~3 小時進行免稅採買與報到手續</div>
           <div class="entry-tags"><span class="tag tag-transport">起飛 16:50</span><span class="tag tag-shop">免稅採購</span></div>
         </div>
@@ -846,12 +889,12 @@
     </div>
   </div>
 
-</div><div id="tickets" class="section-header" style="padding-top:20px;">
+</div><div id="tickets" class="section-header reveal" style="padding-top:20px;">
   <p class="section-label">Booking Guide & Rules</p>
   <h2 class="section-title">票券預約與注意事項</h2>
 </div>
 <div class="tickets-grid" style="margin-bottom: 60px;">
-  <div class="ticket-card ticket-urgent">
+  <div class="ticket-card ticket-urgent reveal">
     <div class="ticket-level">🔴 行前立刻處理</div>
     <div class="ticket-name">餐廳預約與免稅規則</div>
     <div class="ticket-note">
@@ -863,7 +906,7 @@
       </ul>
     </div>
   </div>
-  <div class="ticket-card ticket-recommend">
+  <div class="ticket-card ticket-recommend reveal" style="transition-delay: 0.1s;">
     <div class="ticket-level">🟡 建議電子購票</div>
     <div class="ticket-name">景點門票與浮潛</div>
     <div class="ticket-note">
@@ -873,7 +916,7 @@
       </ul>
     </div>
   </div>
-  <div class="ticket-card ticket-urgent" style="border-color: rgba(255,100,100,0.5);">
+  <div class="ticket-card ticket-urgent reveal" style="border-color: rgba(255,100,100,0.5); transition-delay: 0.2s;">
     <div class="ticket-level" style="color:#ff6b6b;">🚨 緊急應變 SOP</div>
     <div class="ticket-name">車禍與自駕注意事項</div>
     <div class="ticket-note">
@@ -887,24 +930,81 @@
   <p style="font-size: 14px; color: rgba(255,255,255,0.4); font-family: 'Space Mono', monospace; letter-spacing: 0.1em; margin-top:8px;">APR 7 – APR 11, 2026 &nbsp;·&nbsp; Okinawa, Japan</p>
 </footer>
 
+<button id="backToTop" aria-label="回到頂部">↑</button>
+
 <script>
+  // 1. 漢堡選單互動
   const hamburger = document.getElementById('hamburger');
   const navMenu = document.getElementById('nav-menu');
   const navLinks = document.querySelectorAll('.nav-pill');
 
-  // 點擊漢堡按鈕展開/收合選單
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
   });
 
-  // 點擊任意連結後，自動收合選單
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       hamburger.classList.remove('active');
       navMenu.classList.remove('active');
     });
   });
+
+  // 2. 頂部進度條 (Feature 4) & 回到頂部按鈕 (Feature 2)
+  const topBtn = document.getElementById("backToTop");
+  const progressBar = document.getElementById("progressBar");
+
+  window.addEventListener('scroll', () => {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    progressBar.style.width = scrolled + "%";
+
+    if (winScroll > 400) {
+      topBtn.classList.add("show");
+    } else {
+      topBtn.classList.remove("show");
+    }
+  });
+
+  topBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 3. 滾動淡入動畫 (Feature 1: Scroll Reveal)
+  const reveals = document.querySelectorAll('.reveal');
+  const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  const revealObserver = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('active');
+      // 動畫觸發一次後解除監聽，節省效能
+      observer.unobserve(entry.target);
+    });
+  }, revealOptions);
+
+  reveals.forEach(reveal => {
+    revealObserver.observe(reveal);
+  });
+
+  // 4. 當前進度高亮 (Feature 3: Scroll Spy)
+  const sections = document.querySelectorAll('.section-header[id], .day-block[id]');
+  const spyOptions = { rootMargin: '-20% 0px -60% 0px' };
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        let id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.classList.remove('active-nav');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('active-nav');
+          }
+        });
+      }
+    });
+  }, spyOptions);
+
+  sections.forEach(sec => spyObserver.observe(sec));
 </script>
 
 </body>
